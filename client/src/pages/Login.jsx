@@ -1,20 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { useCookies } from "react-cookie";
 import withAuth from "../hoc/withAuth";
 
 const Login = () => {
   // navigate to home if token is found
   const navigate = useNavigate();
-  const [cookies, removeCookie] = useCookies([]); // watch all cookies
-  useEffect(() => {
-    if (cookies.token && cookies.token !== "undefined") {
-      console.log('Token found, navigating to home: ', cookies, typeof cookies, cookies.token, typeof cookies.token);
-      navigate("/dashboard");
-    }
-  }, [cookies, navigate, removeCookie]);
 
   // form state for login
   const [inputValue, setInputValue] = useState({
