@@ -1,0 +1,7 @@
+bugs
+- I have to setTimer after login so cookies can be read in time — seems buggy
+- cookies is not being set properly in navbar after sign in, so you're signed in but it still gives "login" and "signup" options.
+
+not to forget later
+- I changed password to passwordHash
+- I changed login to sign-in

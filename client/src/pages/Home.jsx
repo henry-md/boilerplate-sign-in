@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div>Home</div>
+      <div className="flex items-center justify-center h-[100vh]">Home</div>
     </>
   );
 };

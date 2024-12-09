@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import withAuth from "../hoc/withAuth";
 
 const Login = () => {
   // navigate to home if token is found
@@ -37,7 +36,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:4000/login",
+        "http://localhost:4000/sign-in",
         {
           ...inputValue,
         },
@@ -46,7 +45,7 @@ const Login = () => {
       const { success, message } = res.data;
       if (success) {
         handleSuccess(message);
-        navigate("/");
+        navigate("/dashboard");
       } else {
         handleError(message);
       }
@@ -98,5 +97,4 @@ const Login = () => {
   );
 };
 
-const WrappedLogin = withAuth(Login);
-export default WrappedLogin;
+export default Login;
