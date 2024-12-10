@@ -23,14 +23,24 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await register(email, username, password);
-    if (!result.success) {
-      toast.error(result.error, {
+    console.log('registering');
+    try {
+      const result = await register(email, username, password);
+      console.log('result', result);
+      if (!result.success) {
+        toast.error(result.error, {
+          position: "bottom-left",
+        });
+        return;
+      }
+      navigate("/dashboard");
+    } catch (error) {
+      console.error('error', error);
+      toast.error('An error occurred', {
         position: "bottom-left",
       });
-    } else {
-      navigate("/dashboard");
     }
+  
   };
 
   return (

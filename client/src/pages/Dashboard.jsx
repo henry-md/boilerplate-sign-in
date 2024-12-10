@@ -8,7 +8,7 @@ const Dashboard = () => {
   const user = useStore($user);
 
   useEffect(() => {
-    toast.success(`Welcome ${user.username}!`, {
+    toast(`Welcome ${user.username}!`, {
       position: "bottom-right",
     });
   }, [user]);

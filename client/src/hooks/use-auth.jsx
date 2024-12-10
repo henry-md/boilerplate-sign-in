@@ -5,16 +5,16 @@ import { API_URL } from "@/env";
 function useAuth() {
   const user = useStore($user);
 
-  const register = async (name, username, password) => {
+  const register = async (email, username, password) => {
     try {
-      if (!name || !username || !password) {
-        throw new Error("Name, username, and password are required!");
+      if (!email || !username || !password) {
+        throw new Error("Email, username, and password are required!");
       }
 
       const response = await fetch(`${API_URL}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, username, password }),
+        body: JSON.stringify({ email, username, password }),
         credentials: "include",
       });
       const jsonObject = await response.json();

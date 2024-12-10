@@ -25,6 +25,7 @@ function App() {
       }
     };
     checkValidation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validate]);
   
   return (
