@@ -15,7 +15,6 @@ const hashOptions = {
 const lucia = await initializeLucia();
 
 authRouter.post("/sign-up", async (req, res) => {
-  console.log("sign-up route");
   try {
     const { email, username, password } = req.body;
     const passwordHash = await hash(password, hashOptions);
@@ -70,7 +69,7 @@ authRouter.post("/sign-in", async (req, res) => {
     // Create a session
     const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
-    res.header("Set-Cookie", sessionCookie.serialize(), {
+    res.setHeader("Set-Cookie", sessionCookie.serialize(), {
       append: true,
     });
 
@@ -110,7 +109,7 @@ authRouter.post("/sign-out", async (req, res) => {
   );
 });
 
-authRouter.post("/validate-session", async (req, res) => {
+authRouter.get("/validate-session", async (req, res) => {
   const cookie = req.header("Cookie") ?? "";
   const sessionId = lucia.readSessionCookie(cookie);
   if (!sessionId) {

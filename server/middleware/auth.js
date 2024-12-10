@@ -3,14 +3,12 @@ import { initializeLucia } from "../db/auth.js";
 const lucia = await initializeLucia();
 
 export const auth = async (req, res, next) => {
-  console.log("auth middleware");
   const cookie = req.header("Cookie") ?? "";
   const sessionId = lucia.readSessionCookie(cookie);
 
   if (!sessionId) {
     req.user = null;
     req.session = null;
-    console.log("no session id");
     return next();
   }
 

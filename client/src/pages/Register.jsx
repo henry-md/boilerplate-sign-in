@@ -25,10 +25,8 @@ const Signup = () => {
     e.preventDefault();
     const result = await register(email, username, password);
     if (!result.success) {
-      toast({
-        variant: "destructive",
-        title: "Sorry! We could not register you",
-        description: result.error,
+      toast.error(result.error, {
+        position: "bottom-left",
       });
     } else {
       navigate("/dashboard");

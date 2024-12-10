@@ -1,43 +1,22 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../components/navbar";
+import { $user } from "../lib/store";
+import { useStore } from "@nanostores/react";
+import { useEffect } from "react";
 
 const Dashboard = () => {
-  // Redirect to login if there's no token
-  const navigate = useNavigate();
-  const [cookies, removeCookie] = useCookies([]); // watch all cookies
-  const [username, setUsername] = useState("");
+  const user = useStore($user);
+
   useEffect(() => {
-    const verifyCookie = async () => {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      if (!cookies.token) {
-        console.log('No token found, navigating to login');
-        navigate("/login");
-        return;
-      }
-      const { data } = await axios.post(
-        "http://localhost:4000",
-        {},
-        { withCredentials: true }
-      );
-      const { status, user } = data;
-      setUsername(user);
-      return status
-        ? toast(`Hello ${user}`, {
-            position: "bottom-right",
-          })
-        : (removeCookie("token"), navigate("/login"));
-    };
-    verifyCookie();
-  }, [cookies, navigate, removeCookie]);
+    toast.success(`Welcome ${user.username}!`, {
+      position: "bottom-right",
+    });
+  }, [user]);
 
   return (
     <>
       <Navbar />
-      <h2>Welcome {username}!</h2>
+      <div className="flex items-center justify-center h-[100vh]">Dashboard</div>
       <ToastContainer />
     </>
   );

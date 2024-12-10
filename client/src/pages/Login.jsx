@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import useAuth from "../hooks/use-auth.jsx";
 
 const Login = () => {
-  // navigate to home if token is found
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   // form state for login
@@ -34,24 +34,14 @@ const Login = () => {
   // handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await axios.post(
-        "http://localhost:4000/sign-in",
-        {
-          ...inputValue,
-        },
-        { withCredentials: true }
-      );
-      const { success, message } = res.data;
-      if (success) {
-        handleSuccess(message);
-        navigate("/dashboard");
-      } else {
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error);
+    const result = await login(email, password);
+    if (!result.success) {
+      handleError(result.error);
+    } else {
+      handleSuccess(result.message);
+      navigate("/dashboard");
     }
+
     setInputValue({
       ...inputValue,
       email: "",
@@ -87,7 +77,7 @@ const Login = () => {
             </div>
             <button type="submit">Submit</button>
             <span>
-              Already have an account? <Link to={"/signup"}>Signup</Link>
+              Already have an account? <Link to={"/register"}>Signup</Link>
             </span>
           </form>
           <ToastContainer />

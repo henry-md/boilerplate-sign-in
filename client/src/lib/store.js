@@ -1,10 +1,10 @@
-import { persistentMap } from "nanostores/persistent";
+import { persistentMap } from "@nanostores/persistent";
 
 const defaultUser = {
-  id: "",
-  name: "",
+  _id: "",
   username: "",
   email: "",
+  passwordHash: "",
 };
 export const $user = persistentMap("user:", defaultUser);
 
@@ -13,5 +13,5 @@ export const setUser = (user) => {
 };
 
 export const clearUser = () => {
-  $user.set(null);
+  $user.set(defaultUser);
 };

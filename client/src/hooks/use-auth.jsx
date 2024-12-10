@@ -1,6 +1,5 @@
 import { useStore } from "@nanostores/react";
 import { $user, clearUser, setUser } from "../lib/store";
-import { toast } from "@/components/ui/use-toast";
 import { API_URL } from "@/env";
 
 function useAuth() {
@@ -36,15 +35,15 @@ function useAuth() {
     }
   };
 
-  const login = async (username, password) => {
+  const login = async (email, password) => {
     try {
-      if (!username || !password) {
-        throw new Error("Username and password are required!");
+      if (!email || !password) {
+        throw new Error("Email and password are required!");
       }
       const response = await fetch(`${API_URL}/sign-in`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ email, password }),
         credentials: "include",
       });
       const jsonObject = await response.json();
@@ -75,29 +74,18 @@ function useAuth() {
     } catch (error) {
       const errorMessage =
         (error).message ?? "Please try again later!";
-      toast({
-        variant: "destructive",
-        title: "Sorry! There was an error signing out 🙁",
-        description: errorMessage,
-      });
+      console.log(errorMessage);
     }
   };
 
   const validate = async () => {
-    if (!user || !user.name) return false;
+    if (!user || !user.email) return false;
 
     try {
       const response = await fetch(`${API_URL}/validate-session`, {
         credentials: "include",
       });
-      const jsonObject = await response.json();
-      const msg = jsonObject.message;
-      if (!response.ok) {
-        throw new Error(msg);
-      }
-      const { user } = jsonObject;
-      setUser(user);
-      return true;
+      return response.ok;
     } catch (error) {
       return false;
     }
