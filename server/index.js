@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.js';
 import { auth } from './middleware/auth.js';
+import { authGuard } from './middleware/auth-guard.js';
 
 dotenv.config();
 const app = express();

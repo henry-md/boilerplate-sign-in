@@ -2,6 +2,7 @@ import { Lucia, TimeSpan } from "lucia";
 import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 if (!process.env.MONGO_URL) throw new Error("MONGO_URL is not defined");

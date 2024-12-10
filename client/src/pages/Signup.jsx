@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import useAuth from "../hooks/use-auth.jsx";
 
 const Signup = () => {
+  const { register } = useAuth();
+  
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: "",
@@ -19,41 +21,18 @@ const Signup = () => {
     });
   };
 
-  const handleError = (err) =>
-    toast.error(err, {
-      position: "bottom-left",
-    });
-  const handleSuccess = (msg) =>
-    toast.success(msg, {
-      position: "bottom-right",
-    });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        "http://localhost:4000/sign-up",
-        {
-          ...inputValue,
-        },
-        { withCredentials: true }
-      );
-      const { success, message } = data;
-      if (success) {
-        handleSuccess(message);
-        navigate("/dashboard");
-      } else {
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error);
+    const result = await register(email, username, password);
+    if (!result.success) {
+      toast({
+        variant: "destructive",
+        title: "Sorry! We could not register you",
+        description: result.error,
+      });
+    } else {
+      navigate("/dashboard");
     }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-      username: "",
-    });
   };
 
   return (
