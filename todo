@@ -5,3 +5,8 @@ bugs
 not to forget later
 - I changed password to passwordHash
 - I changed login to sign-in
+
+
+things I did since last meeting
+- migrated file from js -> ts
+- migrated from bad practice token/session mixed auth to session based auth with Lucia
