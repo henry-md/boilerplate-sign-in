@@ -19,7 +19,7 @@ const Login = () => {
     
     const result = await login(email, password);
     if (!result.success) {
-      toast.error(result.error, {
+      toast.error("Incorrect email or password", {
         position: "bottom-left",
       });
     } else {

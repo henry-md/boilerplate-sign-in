@@ -52,7 +52,10 @@ authRouter.post("/sign-in", async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ message: "Incorrect password or email" });
+      return res.status(401).json({ 
+        success: false,
+        message: "Incorrect password or email" 
+      });
     }
     const validPassword = await verify(
       user.passwordHash,
@@ -60,7 +63,7 @@ authRouter.post("/sign-in", async (req, res) => {
       hashOptions
     );
     if (!validPassword) {
-      return res.json({
+      return res.status(401).json({
         success: false,
         message: "Incorrect password or email",
       });

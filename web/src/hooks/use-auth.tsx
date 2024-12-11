@@ -2,6 +2,12 @@ import { useStore } from "@nanostores/react";
 import { $user, clearUser, setUser } from "@/lib/store";
 import { API_URL } from "@/env";
 
+type UserType = {
+  email: string;
+  username: string;
+  passwordHash: string;
+};
+
 function useAuth() {
   const user = useStore($user);
 
@@ -10,19 +16,17 @@ function useAuth() {
       if (!email || !username || !password) {
         throw new Error("Email, username, and password are required!");
       }
-
       const response = await fetch(`${API_URL}/sign-up`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, username, password }),
         credentials: "include",
       });
-      const jsonObject = await response.json();
-      const msg = jsonObject.message;
       if (!response.ok) {
-        throw new Error(msg);
+        throw new Error(`API request failed! with status: ${response.status}`);
       }
-      const { user } = jsonObject;
+
+      const { user }: { user: UserType } = await response.json();
       setUser(user);
       return { success: true };
     } catch (error) {
@@ -46,12 +50,11 @@ function useAuth() {
         body: JSON.stringify({ email, password }),
         credentials: "include",
       });
-      const jsonObject = await response.json();
-      const msg = jsonObject.message;
       if (!response.ok) {
-        throw new Error(msg);
+        throw new Error(`API request failed! with status: ${response.status}`);
       }
-      const { user } = jsonObject;
+
+      const { user }: { user: UserType } = await response.json();
       setUser(user);
       return { success: true };
     } catch (error) {
@@ -74,7 +77,6 @@ function useAuth() {
     } catch (error) {
       const errorMessage =
         (error as Error).message ?? "Please try again later!";
-      console.log(errorMessage);
     }
   };
 

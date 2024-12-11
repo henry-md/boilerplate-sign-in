@@ -12,7 +12,9 @@ const app = express();
 const { MONGO_URL, PORT } = process.env;
 
 mongoose
-  .connect(MONGO_URL)
+  .connect(MONGO_URL, {
+    dbName: "auth-app",
+  })
   .then(() => console.log("MongoDB is  connected successfully"))
   .catch((err) => console.error(err));
 
