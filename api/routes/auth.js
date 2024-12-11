@@ -27,8 +27,8 @@ authRouter.post("/sign-up", async (req, res) => {
 
     const user = await User.create({
       email,
-      passwordHash,
       username,
+      passwordHash,
     });
 
     // Create a session

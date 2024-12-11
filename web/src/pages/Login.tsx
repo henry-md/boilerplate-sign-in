@@ -1,30 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import useAuth from "../hooks/use-auth.js";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  // form state for login
-  // const [inputValue, setInputValue] = useState({
-  //   email: "",
-  //   password: "",
-  // });
-  // const { email, password } = inputValue;
-  // const handleOnChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setInputValue({
-  //     ...inputValue,
-  //     [name]: value,
-  //   });
-  // };
-
-  // handle errors with toast
-  const handleError = (err: any) =>
-    toast.error(err, {
-      position: "bottom-left",
-    });
 
   // handle form submission
   const handleSubmit = async (e: any) => {
@@ -36,51 +19,67 @@ const Login = () => {
     
     const result = await login(email, password);
     if (!result.success) {
-      handleError(result.error);
+      toast.error(result.error, {
+        position: "bottom-left",
+      });
     } else {
       navigate("/dashboard");
     }
-
-    // setInputValue({
-    //   ...inputValue,
-    //   email: "",
-    //   password: "",
-    // });
   };
 
   return (
-    <>
-      <div className="h-[100vh] w-full flex justify-center items-center">
-        <div className="form-container">
-          <h2>Login Account</h2>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                // onChange={handleOnChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                // onChange={handleOnChange}
-              />
-            </div>
-            <button type="submit">Submit</button>
-            <span>
-              Already have an account? <Link to={"/register"}>Signup</Link>
-            </span>
-          </form>
-          <ToastContainer />
+    <div className="flex items-center justify-center h-[100vh]">
+      <div className="w-full max-w-sm mx-auto space-y-8">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-center text-foreground">
+            Sign in to your account
+          </h2>
+          <p className="mt-2 text-sm text-center text-muted-foreground">
+            Or{" "}
+            <Link
+              to={"/register"}
+              className="font-medium text-primary hover:text-primary/80 hover:underline"
+            >
+              create a new account
+            </Link>
+          </p>
         </div>
+        <form className="space-y-6" onSubmit={handleSubmit} method="POST">
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <div className="mt-1">
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                placeholder="Enter your email"
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="password">Password</Label>
+            <div className="mt-1">
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                placeholder="Enter a password"
+              />
+            </div>
+          </div>
+          <div>
+            <Button type="submit" className="w-full">
+              Sign in
+            </Button>
+          </div>
+        </form>
       </div>
-    </>
+      <ToastContainer />
+    </div>
   );
 };
 
