@@ -1,23 +1,27 @@
 import { Route, Routes } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
-import useAuth from "@/hooks/use-auth.tsx";
+import useAuth from "@/hooks/use-auth";
+import { $isAuthenticated, setIsAuthenticated } from '@/store/auth';
 
 // Pages
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { useStore } from "@nanostores/react";
 
 function App() {
   const { validate } = useAuth();
   const validationRoutes = ["/", "/dashboard"];
   const authenticationRoutes = ["/login", "/register"];
+  const isAuthenticated = useStore($isAuthenticated);
   
   // Redirect if authentication doesn't match route
   useEffect(() => {
     const checkValidation = async () => {
       const isValidated = await validate();
+      setIsAuthenticated(isValidated);
       if (validationRoutes.includes(window.location.pathname) && !isValidated) {
         window.location.href = "/login";
       } else if (authenticationRoutes.includes(window.location.pathname) && isValidated) {
@@ -26,7 +30,7 @@ function App() {
     };
     checkValidation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [validate]);
+  }, [isAuthenticated]);
   
   return (
     <div className="App">

@@ -1,11 +1,11 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-import authRoutes from './routes/auth.js';
-import { auth } from './middleware/auth.js';
-import { authGuard } from './middleware/auth-guard.js';
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/auth.js";
+import { auth } from "./middleware/auth.js";
+import { authGuard } from "./middleware/auth-guard.js";
 
 dotenv.config();
 const app = express();
@@ -38,13 +38,11 @@ app.use(express.json());
 app.use((req, res, next) => {
   const start = Date.now();
 
-  res.on('finish', () => {
+  res.on("finish", () => {
     const duration = Date.now() - start;
-    console.log(
-      `${req.method} ${req.url} - ${res.statusCode} ${duration}ms`
-    );
+    console.log(`${req.method} ${req.url} - ${res.statusCode} ${duration}ms`);
   });
-  
+
   next();
 });
 
