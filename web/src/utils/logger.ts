@@ -35,7 +35,7 @@ class Logger {
     const formattedHours = hours % 12 || 12;
     const formattedMinutes = minutes.toString().padStart(2, '0');
     const timestamp = `${formattedHours}:${formattedMinutes}${period}`;
-    return `[${timestamp}] [${level.toUpperCase()}] ${message}`;
+    return `[${timestamp}] [${level.toUpperCase()}] ${message} ${args.join(' ')}`;
   }
 
   debug(message: string, ...args: any[]): void {
