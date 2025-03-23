@@ -2,17 +2,10 @@ import { useStore } from "@nanostores/react";
 import { $user, clearUser, setUser } from "@/store/auth";
 import { API_URL } from "@/env";
 import logger from "@/utils/logger";
-import { $isAuthenticated, setIsAuthenticated } from "@/store/auth";
-
-type UserType = {
-  email: string;
-  username: string;
-  passwordHash: string;
-};
+import { setIsAuthenticated } from "@/store/auth";
 
 function useAuth() {
   const user = useStore($user);
-  const isAuthenticated = useStore($isAuthenticated);
 
   const getAuthHeader = (): Record<string, string> => {
     const token = localStorage.getItem('token');
@@ -42,6 +35,7 @@ function useAuth() {
       logger.debug("[Auth Hook] Registration successful, setting token and user");
       localStorage.setItem('token', token);
       setUser(user);
+      setIsAuthenticated(true);
       return { success: true };
     } catch (error) {
       logger.error("[Auth Hook] Registration error:", error);
@@ -78,6 +72,7 @@ function useAuth() {
       logger.debug("[Auth Hook] Login successful, setting token and user");
       localStorage.setItem('token', token);
       setUser(user);
+      setIsAuthenticated(true);
       return { success: true };
     } catch (error) {
       logger.error("[Auth Hook] Login error:", error);
@@ -103,14 +98,14 @@ function useAuth() {
       logger.debug("[Auth Hook] Logout successful");
     } catch (error) {
       logger.error("[Auth Hook] Logout error:", error);
-      const errorMessage =
-        (error as Error).message ?? "Please try again later!";
+      setIsAuthenticated(false);
     }
   };
 
   const validate = async () => {
     if (!user || !user.email) {
       logger.debug("[Auth Hook] No user found, validation failed");
+      setIsAuthenticated(false);
       return false;
     }
 
@@ -125,17 +120,20 @@ function useAuth() {
         logger.debug("[Auth Hook] Token validation failed");
         localStorage.removeItem('token');
         clearUser();
+        setIsAuthenticated(false);
         return false;
       }
       
       const { user: validatedUser } = await response.json();
       logger.debug("[Auth Hook] Token validated successfully");
       setUser(validatedUser);
+      setIsAuthenticated(true);
       return true;
     } catch (error) {
       logger.error("[Auth Hook] Validation error:", error);
       localStorage.removeItem('token');
       clearUser();
+      setIsAuthenticated(false);
       return false;
     }
   };

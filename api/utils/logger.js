@@ -12,7 +12,6 @@ const levels = {
 };
 
 const level = () => {
-  return "debug";
   const env = process.env.NODE_ENV || "development";
   const isDevelopment = env === "development";
   return isDevelopment ? "debug" : "warn";
@@ -39,11 +38,11 @@ const format = winston.format.combine(
 // Prints to both the console and a file
 const transports = [
   new winston.transports.Console(),
-  new winston.transports.File({
-    filename: "logs/error.log",
-    level: "error",
-  }),
-  new winston.transports.File({ filename: "logs/all.log" }),
+  // new winston.transports.File({
+  //   filename: "logs/error.log",
+  //   level: "error",
+  // }),
+  // new winston.transports.File({ filename: "logs/all.log" }),
 ];
 
 const logger = winston.createLogger({
